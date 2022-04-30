@@ -51,10 +51,6 @@ logging:
     org.springframework.web: DEBUG
     org.hibernate: INFO
 
-
-# inserir broker properties
-
-
 management:
   endpoints:
     web:
