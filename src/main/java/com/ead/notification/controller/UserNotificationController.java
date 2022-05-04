@@ -25,7 +25,7 @@ public class UserNotificationController {
     @Autowired
     NotificationService notificationService;
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('INSTRUCTOR')")
     @GetMapping("/users/{userId}/notifications")
     public ResponseEntity<Page<NotificationModel>> getAllNotificationsByUser(@PathVariable("userId") UUID userId,
                                                                              @PageableDefault(page = 0, size = 10, sort = "notificationId",
@@ -33,6 +33,7 @@ public class UserNotificationController {
          return ResponseEntity.status(HttpStatus.OK).body(notificationService.findAllNotificationsByUser(userId,pageable));
     }
 
+    @PreAuthorize("hasAnyRole('INSTRUCTOR')")
     @PutMapping("/users/{userId}/notifications/{notificationId}")
     public ResponseEntity<Object> update(@PathVariable("userId") UUID userId,
                                   @PathVariable("notificationId") UUID notificationId,
