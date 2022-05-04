@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ public class UserNotificationController {
     @Autowired
     NotificationService notificationService;
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/users/{userId}/notifications")
     public ResponseEntity<Page<NotificationModel>> getAllNotificationsByUser(@PathVariable("userId") UUID userId,
                                                                              @PageableDefault(page = 0, size = 10, sort = "notificationId",

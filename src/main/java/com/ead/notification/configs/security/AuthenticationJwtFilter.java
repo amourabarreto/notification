@@ -24,16 +24,14 @@ public class AuthenticationJwtFilter extends OncePerRequestFilter {
     @Autowired
     JwtProvider jwtProvider;
 
-    @Autowired
-    UserDetailsServiceImpl detailsService;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
             String token = getTokenHeader(request);
             if(token != null && jwtProvider.validateJwt(token)){
                 String userId =  jwtProvider.getSubjectJwt(token);
-                UserDetails userDetails = detailsService.loadUserByUserId(UUID.fromString(userId) );
+                String roles  = jwtProvider.getClaimNameJwt(token,"roles");
+                UserDetails userDetails = UserDetailsImpl.build(UUID.fromString(userId),roles );
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,null,userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
